@@ -1,24 +1,23 @@
 import React from "react";
-import SymptomList from "../components/symptoms/symptomList";
+import { useSession } from "next-auth/react";
+import Status from "../components/homepage/status";
+import LoginPrompt from "./loginprompt";
 
-export default function Home() {
-  const temp_symp_list = ["heart flutter", "restlessness"];
-  const boxStyle = "bg-white p-3 rounded w-56";
-  const container = "grid grid-cols-2 grid-rows-2 gap-4";
-  const main_div = "bg-slate-300 flex item-center justify-center py-4";
+const Home = () => {
+  const { data: session } = useSession();
+  const buttonClass =
+    "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded";
+  const imgClass = "py-2";
 
-  return (
-    <React.Fragment>
-      <div className={main_div}>
-        <div className={container}>
-          <div className={boxStyle}>
-            <SymptomList symptoms={temp_symp_list} />
-          </div>
-          <div className={boxStyle}>box 2</div>
-          <div className={boxStyle}>box 3</div>
-          <div className={boxStyle}>box 4</div>
-        </div>
-      </div>
-    </React.Fragment>
-  );
-}
+  if (session) {
+    return (
+      <>
+        <Status session={session} />
+      </>
+    );
+  } else {
+    return <LoginPrompt />;
+  }
+};
+
+export default Home;
